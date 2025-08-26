@@ -1,0 +1,42 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: settlement
+  datasource:
+    url: jdbc:mysql://localhost:3306/zariya_settlement_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+    username: root
+    password: 12345678
+  flyway:
+    url: jdbc:mysql://localhost:3306/mysql
+    user: root
+    password: 12345678
+    enabled: true
+    locations: classpath:db/migration
+    schemas: zariya_settlement_db
+    default-schema: zariya_settlement_db
+    create-schemas: true
+  jpa:
+    hibernate.ddl-auto: update
+    properties:
+      hibernate.format_sql: true
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: settlement-service-local
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+zariyapay:
+  kafka:
+    topic:
+      transaction-created: transaction.created
+      transaction-settled: transaction.settled
+      transaction-rejected: transaction.rejected
+
+management:
+  endpoints.web.exposure.include: health,info

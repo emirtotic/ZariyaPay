@@ -1,0 +1,52 @@
+@startuml
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+
+rectangle "API Gateway" as gateway
+rectangle "Kafka Event Bus" as kafka
+
+package "Core Banking" {
+  [Auth & Users Service]
+  [Accounts Service]
+  [Transactions Service]
+  [Settlement Service]
+  [Loan Service]
+}
+
+package "Support Services" {
+  [Audit Service]
+  [Notification Service]
+}
+
+package "AI & Insights" {
+  [AdvisorAI Service]
+  [Spring AI / LLM]
+}
+
+database "MySQL" as mysql
+database "MongoDB" as mongo
+database "Redis" as redis
+
+gateway --> [Auth & Users Service]
+gateway --> [Accounts Service]
+gateway --> [Transactions Service]
+gateway --> [AdvisorAI Service]
+
+[AdvisorAI Service] --> [Transactions Service] : fetch spending
+[AdvisorAI Service] --> [Spring AI / LLM] : prompt
+
+[Auth & Users Service] --> mysql
+[Accounts Service] --> mysql
+[Settlement Service] --> mysql
+[Loan Service] --> mysql
+[Audit Service] --> mysql
+[Transactions Service] --> mongo
+[Accounts Service] --> redis
+
+[Transactions Service] -down-> kafka : transaction.created
+[Settlement Service] -down-> kafka : transaction.settled / rejected
+[Loan Service] -down-> kafka : loan.approved
+kafka -down-> [Audit Service]
+kafka -down-> [Notification Service]
+kafka -down-> [Accounts Service] : balance update
+@enduml

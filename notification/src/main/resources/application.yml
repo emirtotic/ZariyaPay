@@ -1,0 +1,21 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: notification
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: notification-service-local
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+zariyapay:
+  kafka:
+    topic:
+      transaction-settled: transaction.settled
+      loan-approved: loan.approved
+
+management:
+  endpoints.web.exposure.include: health,info

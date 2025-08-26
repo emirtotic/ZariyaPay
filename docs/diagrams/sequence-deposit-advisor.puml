@@ -1,0 +1,38 @@
+@startuml
+skinparam sequenceMessageAlign center
+skinparam ArrowThickness 1.3
+skinparam ParticipantPadding 18
+
+actor User
+participant Gateway
+participant "Transactions Service" as TS
+database "MongoDB" as MONGO
+queue "Kafka" as KAFKA
+participant "Settlement Service" as SET
+participant "Accounts Service" as ACC
+participant "Audit Service" as AUD
+participant "Notification Service" as NOTIF
+participant "AdvisorAI Service" as AIS
+participant "Spring AI / LLM" as LLM
+
+User -> Gateway: POST /transactions/deposit (1000 AED)
+Gateway -> TS: createTransaction()
+TS -> MONGO: save(transaction)
+TS -> KAFKA: event transaction.created
+
+KAFKA -> SET: transaction.created
+SET -> ACC: validate & update balance
+SET -> KAFKA: transaction.settled
+
+KAFKA -> AUD: transaction.settled
+KAFKA -> NOTIF: transaction.settled (send SMS/email)
+
+== AdvisorAI Flow ==
+User -> Gateway: POST /advisor/ask ("How can I save more?")
+Gateway -> AIS: ask(question, accountId)
+AIS -> TS: getTransactions(accountId)
+TS -> MONGO: fetch history
+AIS -> LLM: prompt with spending pattern
+LLM --> AIS: financial insights
+AIS --> User: recommendations (UAE context)
+@enduml

@@ -1,0 +1,10 @@
+# Project exclude paths
+/accounts/target/
+/advisor-ai/target/
+/audit/target/
+/auth-users/target/
+/common-error/target/
+/gateway/target/
+/notification/target/
+/settlement/target/
+/transactions/target/

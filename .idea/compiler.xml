@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="notification" />
+        <module name="advisor-ai" />
+        <module name="common-error" />
+        <module name="audit" />
+        <module name="auth-users" />
+        <module name="gateway" />
+        <module name="settlement" />
+      </profile>
+      <profile name="Annotation profile for ZariyaPay" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <option name="mapstruct.defaultComponentModel" value="spring" />
+        <option name="mapstruct.unmappedTargetPolicy" value="ERROR" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.5.5.Final/mapstruct-processor-1.5.5.Final.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.5.5.Final/mapstruct-1.5.5.Final.jar" />
+        </processorPath>
+        <module name="transactions" />
+        <module name="accounts" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="accounts" options="-parameters -Amapstruct.defaultComponentModel=spring -Amapstruct.unmappedTargetPolicy=ERROR" />
+      <module name="advisor-ai" options="-parameters" />
+      <module name="audit" options="-parameters" />
+      <module name="auth-users" options="-parameters" />
+      <module name="common-error" options="-parameters" />
+      <module name="gateway" options="-parameters" />
+      <module name="notification" options="-parameters" />
+      <module name="settlement" options="-parameters" />
+      <module name="transactions" options="-parameters -Amapstruct.defaultComponentModel=spring -Amapstruct.unmappedTargetPolicy=ERROR" />
+    </option>
+  </component>
+</project>

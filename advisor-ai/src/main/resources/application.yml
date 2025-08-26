@@ -1,0 +1,21 @@
+server:
+  port: 8088
+
+spring:
+  application:
+    name: advisor-ai
+  ai:
+    openai:
+      api-key: "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"
+      chat:
+        options:
+          model: gpt-4o-mini
+          temperature: 0.2
+
+# Feign (ako ga dodaš) – base URL ka Transactions
+advisor:
+  transactions:
+    base-url: http://localhost:8082
+
+management:
+  endpoints.web.exposure.include: health,info
