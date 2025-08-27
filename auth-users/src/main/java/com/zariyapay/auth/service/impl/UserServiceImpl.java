@@ -7,9 +7,11 @@ import com.zariyapay.auth.mapper.UserMapper;
 import com.zariyapay.auth.repository.RoleRepository;
 import com.zariyapay.auth.repository.UserRepository;
 import com.zariyapay.auth.service.UserService;
+import com.zariyapay.common.error.ResourceNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,7 +30,7 @@ public class UserServiceImpl implements UserService {
     public UserDto findUserById(Long id) {
 
         User user = Optional.ofNullable(userRepository.findUserById(id))
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
 
         return userMapper.mapToDto(user);
     }
@@ -42,14 +44,15 @@ public class UserServiceImpl implements UserService {
         Role role = roleRepository.findRoleById(userDto.getRoleId());
         user.setRole(role);
         userRepository.save(user);
-        return userDto;
+        return userMapper.mapToDto(user);
     }
 
     @Override
+    @Transactional
     public String deleteUser(Long id) {
 
         User user = Optional.ofNullable(userRepository.findUserById(id))
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
 
         userRepository.deleteUserById(user.getId());
 
@@ -60,7 +63,7 @@ public class UserServiceImpl implements UserService {
     public UserDto updateUser(Long id, UserDto userDto) {
 
         User user = Optional.ofNullable(userRepository.findUserById(id))
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
 
         user.setPasswordHash(userDto.getPasswordHash());
         user.setFirstName(userDto.getFirstName());
