@@ -6,7 +6,7 @@ spring:
     name: advisor-ai
   ai:
     openai:
-      api-key: "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"
+      api-key: "{OPEN-API}"
       chat:
         options:
           model: gpt-4o-mini
