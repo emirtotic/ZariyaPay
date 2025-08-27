@@ -18,25 +18,25 @@ CREATE TABLE IF NOT EXISTS `role`
 CREATE TABLE IF NOT EXISTS `user`
 (
     id            BIGINT PRIMARY KEY AUTO_INCREMENT,
-    username      VARCHAR(50)  NOT NULL,
-    email         VARCHAR(254) NOT NULL,
-    password      VARCHAR(100) NOT NULL,
+    password_hash VARCHAR(100) NOT NULL,
     first_name    VARCHAR(100) NULL,
     last_name     VARCHAR(100) NULL,
+    email         VARCHAR(100) NOT NULL UNIQUE,
     active        BOOLEAN      NOT NULL DEFAULT TRUE,
     role_id       BIGINT       NOT NULL,
     created_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at    TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-    CONSTRAINT uk_user_username UNIQUE (username),
-    CONSTRAINT uk_user_email    UNIQUE (email),
-    CONSTRAINT fk_user_role     FOREIGN KEY (role_id) REFERENCES `role` (id)
+    CONSTRAINT uk_user_email UNIQUE (email),
+    CONSTRAINT fk_user_role FOREIGN KEY (role_id) REFERENCES `role` (id)
 );
 
 INSERT INTO `role` (name, description)
-SELECT * FROM (SELECT 'ROLE_USER' AS name, 'Standard user role' AS description) AS tmp
+SELECT *
+FROM (SELECT 'ROLE_USER' AS name, 'Standard user role' AS description) AS tmp
 WHERE NOT EXISTS (SELECT 1 FROM `role` WHERE name = 'ROLE_USER');
 
 INSERT INTO `role` (name, description)
-SELECT * FROM (SELECT 'ROLE_ADMIN' AS name, 'Administrator role' AS description) AS tmp
+SELECT *
+FROM (SELECT 'ROLE_ADMIN' AS name, 'Administrator role' AS description) AS tmp
 WHERE NOT EXISTS (SELECT 1 FROM `role` WHERE name = 'ROLE_ADMIN');

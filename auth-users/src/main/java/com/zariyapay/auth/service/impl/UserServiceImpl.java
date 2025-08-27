@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -35,6 +37,8 @@ public class UserServiceImpl implements UserService {
     public UserDto createUser(UserDto userDto) {
 
         User user = userMapper.mapToEntity(userDto);
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
         Role role = roleRepository.findRoleById(userDto.getRoleId());
         user.setRole(role);
         userRepository.save(user);
@@ -58,18 +62,20 @@ public class UserServiceImpl implements UserService {
         User user = Optional.ofNullable(userRepository.findUserById(id))
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        user.setExternalId(userDto.getExternalId());
         user.setPasswordHash(userDto.getPasswordHash());
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
+        user.setEmail(userDto.getEmail());
+        user.setActive(userDto.isActive());
         user.setCreatedAt(userDto.getCreatedAt());
         user.setUpdatedAt(userDto.getUpdatedAt());
+        user.setUpdatedAt(LocalDateTime.now());
 
         Role role = roleRepository.findRoleById(userDto.getRoleId());
         user.setRole(role);
 
         userRepository.save(user);
 
-        return userDto;
+        return userMapper.mapToDto(user);
     }
 }
