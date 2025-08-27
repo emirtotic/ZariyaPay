@@ -29,3 +29,9 @@ management:
 logging:
   level:
     org.springframework: info
+
+security:
+  jwt:
+    secret: "zariyapay-secret-key-that-is-32-bytes!"
+    expiration: 3600000
+

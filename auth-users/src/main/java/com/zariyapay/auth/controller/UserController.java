@@ -1,5 +1,7 @@
 package com.zariyapay.auth.controller;
 
+import com.zariyapay.auth.dto.JwtResponse;
+import com.zariyapay.auth.dto.LoginRequest;
 import com.zariyapay.auth.dto.UserDto;
 import com.zariyapay.auth.service.UserService;
 import jakarta.validation.Valid;
@@ -22,7 +24,7 @@ public class UserController {
         return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
-    @PostMapping("/create")
+    @PostMapping("/register")
     public ResponseEntity<UserDto> createUser(@RequestBody @Valid UserDto userDto) {
         UserDto user = userService.createUser(userDto);
         return new ResponseEntity<>(user, HttpStatus.CREATED);
@@ -40,6 +42,12 @@ public class UserController {
 
         UserDto user = userService.updateUser(id, userDto);
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<JwtResponse> login(@RequestBody @Valid LoginRequest request) {
+        String token = userService.login(request);
+        return ResponseEntity.ok(new JwtResponse(token));
     }
 
 

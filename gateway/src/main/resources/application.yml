@@ -26,7 +26,7 @@ spring:
           predicates:
             - Path=/advisor/**
       default-filters:
-        - RemoveRequestHeader=Cookie
+        - PreserveHostHeader
 
 management:
   endpoints:
@@ -38,4 +38,3 @@ logging:
   level:
     org.springframework.security: DEBUG
     org.springframework.web.server.adapter.HttpWebHandlerAdapter: TRACE
-
